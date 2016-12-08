@@ -83,6 +83,7 @@ package{
                 ExternalInterface.addCallback("vjs_pause", onPauseCalled);
                 ExternalInterface.addCallback("vjs_resume", onResumeCalled);
                 ExternalInterface.addCallback("vjs_stop", onStopCalled);
+                ExternalInterface.addCallback("vjs_takeScreenshot", onTakeScreenshot);
             }
             catch(e:SecurityError){
                 if (loaderInfo.parameters.debug != undefined && loaderInfo.parameters.debug == "true") {
@@ -214,6 +215,10 @@ package{
             _app.model.discontinuity();
         }
 
+		private function onTakeScreenshot():*{
+			return _app.model.takeScreenshot;
+		}
+
         private function onGetPropertyCalled(pPropertyName:String = ""):*{
 
             switch(pPropertyName){
@@ -297,6 +302,9 @@ package{
                     break;
                 case "rtmpStream":
                     return _app.model.rtmpStream;
+                    break;
+                case "takeScreenshot":
+                    return _app.model.takeScreenshot;
                     break;
             }
             return null;

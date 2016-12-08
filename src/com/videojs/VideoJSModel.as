@@ -10,7 +10,9 @@ package com.videojs{
     import com.videojs.structs.ExternalEventName;
     import com.videojs.structs.PlaybackType;
     import com.videojs.structs.PlayerMode;
-
+	import com.videojs.Base64;
+	import com.videojs.Base64Bingyao;
+	
     import flash.events.Event;
     import flash.events.EventDispatcher;
     import flash.external.ExternalInterface;
@@ -19,7 +21,11 @@ package com.videojs{
     import flash.media.SoundTransform;
     import flash.media.Video;
     import flash.utils.ByteArray;
-
+	import flash.display.BitmapData;
+	import com.adobe.images.PNGEncoder;
+	import flash.external.ExternalInterface;
+	import flash.geom.Matrix;
+		
     public class VideoJSModel extends EventDispatcher{
 
         private var _masterVolume:SoundTransform;
@@ -617,9 +623,35 @@ package com.videojs{
                     broadcastEventExternally(ExternalErrorEventName.UNSUPPORTED_MODE);
             }
         }
+        
+        public function get takeScreenshot():String{
+			var sResult:String = "";
+			if(_videoReference != null){
+				try{
+					var w:Number = _videoReference.width/_videoReference.scaleX;
+					var h:Number = _videoReference.height/_videoReference.scaleY;
+
+					// ExternalInterface.call("console.log", "[VIDEO-JS-SWF] w: " + w);
+					// ExternalInterface.call("console.log", "[VIDEO-JS-SWF] h: " + h);
+					var kw = 150/w;
+					var kh = (_videoReference.scaleY/_videoReference.scaleX) * kw;
+					var bitmapData:BitmapData = new BitmapData(kw*w, kh*h, false, 0x000000);
+					var myMatrix:Matrix = new Matrix();
+					myMatrix.scale(kw, kh);
+					bitmapData.draw(_videoReference,myMatrix);
+					var ba:ByteArray = PNGEncoder.encode(bitmapData);
+					sResult = Base64Bingyao.encode(ba);
+					// ExternalInterface.call("console.log", "[VIDEO-JS-SWF] sResult.length(): " + sResult.length);
+
+				}catch(err:Error){
+					sResult = ""
+					//sResult = "Error: " + err.message;
+				}
+			}
+			return sResult;
+        }
     }
 }
-
 
 /**
  * @internal This is a private class declared outside of the package
