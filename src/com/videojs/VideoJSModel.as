@@ -48,6 +48,8 @@ package com.videojs{
         private var _src:String = "";
         private var _rtmpConnectionURL:String = "";
         private var _rtmpStream:String = "";
+		private var _bufferTime:Number = 0;
+		private var _maxBufferTime:Number = 0;
 
         private static var _instance:VideoJSModel;
 
@@ -205,6 +207,19 @@ package com.videojs{
             }
             return _src;
         }
+        
+        public function get bufferTime():Number{
+            /*if(_provider){
+                return _provider.bufferTime;
+            }*/
+            return _bufferTime;
+        }
+        
+        public function set bufferTime(pValue:Number):void {
+			_bufferTime = pValue;
+			// broadcastEventExternally(ExternalEventName.ON_BUFFER_CHANGE, _src);
+		}
+        
         public function set src(pValue:String):void {
             _src = pValue;
             _rtmpConnectionURL = "";
@@ -631,6 +646,8 @@ package com.videojs{
 					var w:Number = _videoReference.width/_videoReference.scaleX;
 					var h:Number = _videoReference.height/_videoReference.scaleY;
 
+					// throw new ArgumentError("I am an ArgumentError");
+
 					// ExternalInterface.call("console.log", "[VIDEO-JS-SWF] w: " + w);
 					// ExternalInterface.call("console.log", "[VIDEO-JS-SWF] h: " + h);
 					var kw = 150/w;
@@ -641,12 +658,15 @@ package com.videojs{
 					bitmapData.draw(_videoReference,myMatrix);
 					var ba:ByteArray = PNGEncoder.encode(bitmapData);
 					sResult = Base64Bingyao.encode(ba);
-					// ExternalInterface.call("console.log", "[VIDEO-JS-SWF] sResult.length(): " + sResult.length);
+					ExternalInterface.call("console.log", "[VIDEO-JS-SWF] sResult.length(): " + sResult.length);
 
 				}catch(err:Error){
 					sResult = ""
-					//sResult = "Error: " + err.message;
+					ExternalInterface.call("console.error", "[VIDEO-JS-SWF] takeScreenshot: " + err.toString());
+					ExternalInterface.call("console.error", "[VIDEO-JS-SWF] takeScreenshot: " + err.getStackTrace());
 				}
+			}else{
+				ExternalInterface.call("console.error", "[VIDEO-JS-SWF] _videoReference is null");
 			}
 			return sResult;
         }
