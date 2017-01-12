@@ -32,6 +32,8 @@ package com.videojs.providers{
         private var _loadErrored:Boolean = false;
         private var _pauseOnStart:Boolean = false;
         private var _pausePending:Boolean = false;
+        private var _bufferTime: Number = 1.5;
+        private var _bufferTimeMax: Number = 4.5;
         private var _videoReference:Video;
 
         private var _src:Object;
@@ -75,6 +77,34 @@ package com.videojs.providers{
                 return 0;
             }
         }
+
+        public function get bufferTime():Number{
+			if(_ns != null){
+				return _ns.bufferTime;
+			}
+			return _bufferTime;
+		}
+		
+        public function set bufferTime(val:Number):void{
+			_bufferTime = val;
+			if(_ns != null){
+                _ns.bufferTime = _bufferTime;
+            }
+		}
+
+        public function get bufferTimeMax():Number{
+			if(_ns != null){
+				return _ns.bufferTimeMax;
+			}
+			return _bufferTimeMax;
+		}
+		
+        public function set bufferTimeMax(val:Number):void{
+			_bufferTimeMax = val;
+			if(_ns != null){
+                _ns.bufferTimeMax = _bufferTimeMax;
+            }
+		}
 
         public function get duration():Number{
             if(_metadata != null && _metadata.duration != undefined){
@@ -422,14 +452,10 @@ package com.videojs.providers{
             _ns = new NetStream(_nc);
             _ns.addEventListener(NetStatusEvent.NET_STATUS, onNetStreamStatus);
             _ns.client = this;
-            
-            _ns.bufferTime = 1;
-            _ns.bufferTimeMax = 3;
-            
-            // example of min latency
-            // _ns.bufferTime = 0.2;
-            // _ns.bufferTimeMax = 1.2;
-            
+
+            _ns.bufferTime = _bufferTime;
+            _ns.bufferTimeMax = _bufferTimeMax;
+
             _ns.play(_src.streamURL);
             _videoReference.attachNetStream(_ns);
             _model.broadcastEventExternally(ExternalEventName.ON_LOAD_START);

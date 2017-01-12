@@ -48,8 +48,8 @@ package com.videojs{
         private var _src:String = "";
         private var _rtmpConnectionURL:String = "";
         private var _rtmpStream:String = "";
-		private var _bufferTime:Number = 0;
-		private var _maxBufferTime:Number = 0;
+		private var _bufferTime:Number = 1.5;
+		private var _bufferTimeMax:Number = 4.5;
 
         private static var _instance:VideoJSModel;
 
@@ -208,17 +208,35 @@ package com.videojs{
             return _src;
         }
         
-        public function get bufferTime():Number{
-            /*if(_provider){
+        public function set bufferTime(pValue:Number):void {
+			_bufferTime = pValue;
+			if(_provider){
+                _provider.bufferTime = _bufferTime;
+            }
+			broadcastEventExternally(ExternalEventName.ON_BUFFERTIME_CHANGE, _bufferTime);
+		}
+		
+		public function get bufferTime():Number{
+            if(_provider){
                 return _provider.bufferTime;
-            }*/
+            }
             return _bufferTime;
         }
         
-        public function set bufferTime(pValue:Number):void {
-			_bufferTime = pValue;
-			// broadcastEventExternally(ExternalEventName.ON_BUFFER_CHANGE, _src);
+        public function set bufferTimeMax(pValue:Number):void {
+			_bufferTimeMax = pValue;
+			if(_provider){
+                _provider.bufferTimeMax = _bufferTimeMax;
+            }
+			broadcastEventExternally(ExternalEventName.ON_BUFFERTIMEMAX_CHANGE, _bufferTimeMax);
 		}
+		
+		public function get bufferTimeMax():Number{
+            if(_provider){
+                return _provider.bufferTimeMax;
+            }
+            return _bufferTimeMax;
+        }
         
         public function set src(pValue:String):void {
             _src = pValue;
@@ -614,6 +632,10 @@ package com.videojs{
                         };
                         _provider = new HTTPVideoProvider();
                         _provider.attachVideo(_videoReference);
+                        
+                        _provider.bufferTime = _bufferTime;
+                        _provider.bufferTimeMax = _bufferTimeMax;
+                        
                         _provider.init(__src, _autoplay);
                     }
                     else if(_currentPlaybackType == PlaybackType.RTMP){
@@ -622,6 +644,9 @@ package com.videojs{
                             streamURL: _rtmpStream
                         };
                         _provider = new RTMPVideoProvider();
+                        _provider.bufferTime = _bufferTime;
+                        _provider.bufferTimeMax = _bufferTimeMax;
+                        
                         _provider.attachVideo(_videoReference);
                         _provider.init(__src, _autoplay);
                     }

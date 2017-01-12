@@ -21,6 +21,18 @@ package com.videojs.providers{
         function get time():Number;
         
         /**
+         * Setter and getter for buffer time (supported only for rtmpprovider)
+         */
+        function get bufferTime():Number;
+        function set bufferTime(newval:Number):void;
+        
+        /**
+         * Setter and getter for maximal buffer time (supported only for rtmpprovider)
+         */ 
+        function get bufferTimeMax():Number;
+        function set bufferTimeMax(newval:Number):void;
+        
+        /**
          * Should return a value that indicates the current asset's duration, in seconds.
          */
         function get duration():Number;

@@ -77,6 +77,22 @@ package com.videojs.providers{
             }
         }
 
+		public function get bufferTime():Number{
+			return 0;
+		}
+		
+        public function set bufferTime(val:Number):void{
+			// not used
+		}
+
+        public function get bufferTimeMax():Number{
+			return 0;
+		}
+		
+        public function set bufferTimeMax(val:Number):void{
+			// not used
+		}
+
         public function get duration():Number{
             return _audioDuration / 1000;
         }

@@ -39,6 +39,25 @@ package{
             // Allow JS calls from other domains
             Security.allowDomain("*");
             Security.allowInsecureDomain("*");
+			
+
+			/*
+			// var url:String = loaderInfo.loaderURL;
+            var swf_url:String = loaderInfo.loaderURL;
+			ExternalInterface.call("console.log", "[VIDEOJS-SWF] swf url: " + loaderInfo.loaderURL);
+
+			var swf_path:String = swf_url.substring(0, swf_url.lastIndexOf("/") + 1);
+			ExternalInterface.call("console.log", "[VIDEOJS-SWF] swf path: " + swf_path);
+
+			var swf_name:String = swf_url.substring(swf_url.lastIndexOf("/") + 1);
+			ExternalInterface.call("console.log", "[VIDEOJS-SWF] swf name: " + swf_name);
+			
+			// var swf_crossdomain:String = swf_path + swf_name.replace( /\.swf/g, '_crossdomain.xml');
+			var swf_crossdomain:String = swf_path + 'crossdomain.xml';
+			ExternalInterface.call("console.log", "[VIDEOJS-SWF] swf crossdomain: " + swf_crossdomain);
+
+			Security.loadPolicyFile(swf_crossdomain);
+			*/
 
             if(loaderInfo.hasOwnProperty("uncaughtErrorEvents")){
                 // we'll want to suppress ANY uncaught debug errors in production (for the sake of ux)
@@ -84,6 +103,8 @@ package{
                 ExternalInterface.addCallback("vjs_resume", onResumeCalled);
                 ExternalInterface.addCallback("vjs_stop", onStopCalled);
                 ExternalInterface.addCallback("vjs_takeScreenshot", onTakeScreenshot);
+                ExternalInterface.addCallback("vjs_bufferTime", onBufferTime);
+                ExternalInterface.addCallback("vjs_bufferTimeMax", onBufferTimeMax);
             }
             catch(e:SecurityError){
                 if (loaderInfo.parameters.debug != undefined && loaderInfo.parameters.debug == "true") {
@@ -218,6 +239,20 @@ package{
 		private function onTakeScreenshot():*{
 			return _app.model.takeScreenshot;
 		}
+		
+		private function onBufferTime(pValue:* = null):*{
+			if(pValue != null){
+				_app.model.bufferTime = Number(pValue);
+			}
+			return _app.model.bufferTime;
+		}
+		
+		private function onBufferTimeMax(pValue:* = null):*{
+			if(pValue != null){
+				_app.model.bufferTimeMax = Number(pValue);
+			}
+			return _app.model.bufferTimeMax;
+		}
 
         private function onGetPropertyCalled(pPropertyName:String = ""):*{
 
@@ -306,6 +341,12 @@ package{
                 case "takeScreenshot":
                     return _app.model.takeScreenshot;
                     break;
+				case "bufferTime":
+                    return _app.model.bufferTime;
+                    break;
+                case "bufferTimeMax":
+                    return _app.model.bufferTimeMax;
+                    break;
             }
             return null;
         }
@@ -361,6 +402,11 @@ package{
                     break;
                 case "rtmpStream":
                     _app.model.rtmpStream = String(pValue);
+                    break;
+                case "bufferTime":
+                    _app.model.bufferTime = Number(pValue);
+                case "bufferTimeMax":
+                    _app.model.bufferTimeMax = Number(pValue);
                     break;
                 default:
                     _app.model.broadcastErrorEventExternally(ExternalErrorEventName.PROPERTY_NOT_FOUND, pPropertyName);
@@ -428,6 +474,5 @@ package{
         private function onStageClick(e:MouseEvent):void{
             _app.model.broadcastEventExternally(ExternalEventName.ON_STAGE_CLICK);
         }
-
     }
 }
