@@ -45,6 +45,7 @@ package com.videojs.providers{
         private var _loadErrored:Boolean = false;
         private var _pausePending:Boolean = false;
         private var _onmetadadataFired:Boolean = false;
+        private var _playerStats:Object = new Object();
         
         /**
          * The number of seconds between the logical start of the stream and the current zero
@@ -131,6 +132,10 @@ package com.videojs.providers{
 			// not used
 		}
 		
+		public function get playerStats():Object{
+            return _playerStats;
+        }
+        
         public function get duration():Number{
             if(_metadata != null && _metadata.duration != undefined){
                 return Number(_metadata.duration);

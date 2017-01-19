@@ -48,9 +48,9 @@ package com.videojs{
         private var _src:String = "";
         private var _rtmpConnectionURL:String = "";
         private var _rtmpStream:String = "";
-		private var _bufferTime:Number = 1.5;
-		private var _bufferTimeMax:Number = 4.5;
-
+		private var _bufferTime:Number = 5;
+		private var _bufferTimeMax:Number = 10;
+		private var _playerStats:Object = new Object();
         private static var _instance:VideoJSModel;
 
         public function VideoJSModel(pLock:SingletonLock){
@@ -236,6 +236,13 @@ package com.videojs{
                 return _provider.bufferTimeMax;
             }
             return _bufferTimeMax;
+        }
+        
+        public function get playerStats():Object{
+            if(_provider){
+                return _provider.playerStats;
+            }
+            return _playerStats;
         }
         
         public function set src(pValue:String):void {

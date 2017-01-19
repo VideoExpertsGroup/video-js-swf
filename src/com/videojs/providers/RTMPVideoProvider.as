@@ -32,8 +32,9 @@ package com.videojs.providers{
         private var _loadErrored:Boolean = false;
         private var _pauseOnStart:Boolean = false;
         private var _pausePending:Boolean = false;
-        private var _bufferTime: Number = 1.5;
-        private var _bufferTimeMax: Number = 4.5;
+        private var _bufferTime: Number = 5;
+        private var _bufferTimeMax: Number = 10;
+        private var _playerStats:Object = new Object();
         private var _videoReference:Video;
 
         private var _src:Object;
@@ -98,6 +99,29 @@ package com.videojs.providers{
 			}
 			return _bufferTimeMax;
 		}
+		
+		public function get playerStats():Object{
+			if(_ns != null){
+				_playerStats["bufferTimeMax"] = _ns.bufferTimeMax;
+				_playerStats["bufferTime"] = _ns.bufferTime;
+				_playerStats["bufferLength"] = _ns.bufferLength;
+				_playerStats["bytesTotal"] = _ns.bytesTotal;
+				_playerStats["currentFPS"] = _ns.currentFPS;
+				_playerStats["dataReliable"] = _ns.dataReliable;
+				_playerStats["liveDelay"] = _ns.liveDelay;
+				_playerStats["maxPauseBufferTime"] = _ns.maxPauseBufferTime;
+				_playerStats["time"] = _ns.time;
+				_playerStats["info"] = _ns.info;
+				_playerStats["farID"] = _ns.farID;
+				_playerStats["farNonce"] = _ns.farNonce;
+				_playerStats["inBufferSeek"] = _ns.inBufferSeek;
+				_playerStats["backBufferTime"] = _ns.backBufferTime;
+				_playerStats["audioReliable"] = _ns.audioReliable;
+				_playerStats["backBufferLength"] = _ns.backBufferLength;
+            }	
+            
+            return _playerStats;
+        }
 		
         public function set bufferTimeMax(val:Number):void{
 			_bufferTimeMax = val;

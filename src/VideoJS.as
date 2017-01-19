@@ -105,6 +105,7 @@ package{
                 ExternalInterface.addCallback("vjs_takeScreenshot", onTakeScreenshot);
                 ExternalInterface.addCallback("vjs_bufferTime", onBufferTime);
                 ExternalInterface.addCallback("vjs_bufferTimeMax", onBufferTimeMax);
+                ExternalInterface.addCallback("vjs_playerStats", onPlayerStats);
             }
             catch(e:SecurityError){
                 if (loaderInfo.parameters.debug != undefined && loaderInfo.parameters.debug == "true") {
@@ -252,6 +253,10 @@ package{
 				_app.model.bufferTimeMax = Number(pValue);
 			}
 			return _app.model.bufferTimeMax;
+		}
+		
+		private function onPlayerStats():*{
+			return _app.model.playerStats;
 		}
 
         private function onGetPropertyCalled(pPropertyName:String = ""):*{

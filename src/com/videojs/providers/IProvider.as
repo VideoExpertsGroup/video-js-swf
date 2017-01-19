@@ -33,6 +33,11 @@ package com.videojs.providers{
         function set bufferTimeMax(newval:Number):void;
         
         /**
+         * Return statistics of player
+         */
+        function get playerStats():Object;
+        
+        /**
          * Should return a value that indicates the current asset's duration, in seconds.
          */
         function get duration():Number;
