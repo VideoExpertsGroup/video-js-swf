@@ -32,8 +32,8 @@ package com.videojs.providers{
         private var _loadErrored:Boolean = false;
         private var _pauseOnStart:Boolean = false;
         private var _pausePending:Boolean = false;
-        private var _bufferTime: Number = 5;
-        private var _bufferTimeMax: Number = 10;
+        private var _bufferTime: Number = 1.5;
+        private var _bufferTimeMax: Number = 4.5;
         private var _playerStats:Object = new Object();
         private var _videoReference:Video;
 
@@ -283,9 +283,10 @@ package com.videojs.providers{
             _loadErrored = false;
             _loadStarted = false;
             _loadCompleted = false;
-            if(pAutoplay){
+            // not need here
+            /*if(pAutoplay){
                 play();
-            }
+            }*/
         }
 
         public function load():void{
@@ -307,7 +308,7 @@ package com.videojs.providers{
             // if the asset is paused
             else if(_isPaused && !_reportEnded){
                 _pausePending = false;
-                _ns.resume();
+                 _ns.resume();
                 _isPaused = false;
                 _model.broadcastEventExternally(ExternalEventName.ON_RESUME);
                 _model.broadcastEvent(new VideoPlaybackEvent(VideoPlaybackEvent.ON_STREAM_START, {}));
@@ -474,11 +475,13 @@ package com.videojs.providers{
                 _ns = null;
             }
             _ns = new NetStream(_nc);
+            _ns.bufferTime = _bufferTime;
+            _ns.backBufferTime = _bufferTime;
+            _ns.bufferTimeMax = _bufferTimeMax;
+            _ns.maxPauseBufferTime = _bufferTimeMax;
+
             _ns.addEventListener(NetStatusEvent.NET_STATUS, onNetStreamStatus);
             _ns.client = this;
-
-            _ns.bufferTime = _bufferTime;
-            _ns.bufferTimeMax = _bufferTimeMax;
 
             _ns.play(_src.streamURL);
             _videoReference.attachNetStream(_ns);
@@ -531,7 +534,6 @@ package com.videojs.providers{
                     }
                     break;
                 default:
-
                     if(e.info.level == "error"){
                         _model.broadcastErrorEventExternally(e.info.code);
                         _model.broadcastErrorEventExternally(e.info.description);
@@ -545,6 +547,9 @@ package com.videojs.providers{
         private function onNetStreamStatus(e:NetStatusEvent):void{
             switch(e.info.code){
                 case "NetStream.Play.Reset":
+                    break;
+                    
+				case "NetStream.Buffer.Flush":
                     break;
                 case "NetStream.Play.Start":
                     _canPlayThrough = false;
@@ -570,6 +575,19 @@ package com.videojs.providers{
                     break;
 
                 case "NetStream.Buffer.Full":
+					// Sometimes bug on start NetStream: empty buffer
+					ExternalInterface.call("console.log", "[VIDEOJS-SWF] onNetStreamStatus: NetStream.Buffer.Full");
+					ExternalInterface.call("console.log", "[VIDEOJS-SWF] onNetStreamStatus: _ns.bufferTime = " + _ns.bufferTime);
+					ExternalInterface.call("console.log", "[VIDEOJS-SWF] onNetStreamStatus: _ns.bufferLength = " + _ns.bufferLength);
+
+					if(_ns.bufferLength < (_ns.bufferTime *0.8)){
+						ExternalInterface.call("console.log", "[VIDEOJS-SWF] onNetStreamStatus: _ns.pause()");
+						_ns.pause();
+						if(!_pausePending){
+							ExternalInterface.call("console.log", "[VIDEOJS-SWF] onNetStreamStatus: _ns.resume()");
+							_ns.resume();
+						}
+					}
                     _isBuffering = false;
                     _isPlaying = true;
                     _model.broadcastEventExternally(ExternalEventName.ON_BUFFER_FULL);
