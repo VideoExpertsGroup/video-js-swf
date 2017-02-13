@@ -12,7 +12,8 @@ package com.videojs{
     import com.videojs.structs.PlayerMode;
 	import com.videojs.Base64;
 	import com.videojs.Base64Bingyao;
-	
+	import com.videojs.Defaults;
+
     import flash.events.Event;
     import flash.events.EventDispatcher;
     import flash.external.ExternalInterface;
@@ -48,8 +49,8 @@ package com.videojs{
         private var _src:String = "";
         private var _rtmpConnectionURL:String = "";
         private var _rtmpStream:String = "";
-		private var _bufferTime:Number = 1.5;
-		private var _bufferTimeMax:Number = 4.5;
+		private var _bufferTime:Number = Defaults.BUFFER_TIME;
+		private var _bufferTimeMax:Number = Defaults.BUFFER_TIME_MAX;
 		private var _playerStats:Object = new Object();
         private static var _instance:VideoJSModel;
 

@@ -1,6 +1,7 @@
 package com.videojs.providers{
 
     import com.videojs.VideoJSModel;
+    import com.videojs.Defaults;
     import com.videojs.events.VideoPlaybackEvent;
     import com.videojs.structs.ExternalErrorEventName;
     import com.videojs.structs.ExternalEventName;
@@ -32,8 +33,8 @@ package com.videojs.providers{
         private var _loadErrored:Boolean = false;
         private var _pauseOnStart:Boolean = false;
         private var _pausePending:Boolean = false;
-        private var _bufferTime: Number = 1.5;
-        private var _bufferTimeMax: Number = 4.5;
+        private var _bufferTime: Number = Defaults.BUFFER_TIME;
+        private var _bufferTimeMax: Number = Defaults.BUFFER_TIME_MAX;
         private var _playerStats:Object = new Object();
         private var _videoReference:Video;
 
