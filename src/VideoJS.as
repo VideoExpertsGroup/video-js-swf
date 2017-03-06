@@ -85,9 +85,10 @@ package{
         }
 
         private function registerExternalMethods():void{
-
+            ExternalInterface.marshallExceptions = true;
             try{
                 ExternalInterface.addCallback("vjs_appendBuffer", onAppendBufferCalled);
+                ExternalInterface.addCallback("vjs_appendChunkReady", onAppendChunkReadyCalled);
                 ExternalInterface.addCallback("vjs_echo", onEchoCalled);
                 ExternalInterface.addCallback("vjs_endOfStream", onEndOfStreamCalled);
                 ExternalInterface.addCallback("vjs_abort", onAbortCalled);
@@ -106,6 +107,9 @@ package{
                 ExternalInterface.addCallback("vjs_bufferTime", onBufferTime);
                 ExternalInterface.addCallback("vjs_bufferTimeMax", onBufferTimeMax);
                 ExternalInterface.addCallback("vjs_playerStats", onPlayerStats);
+                // This callback should only be used when in data generation mode as it
+                // will adjust the notion of current time without notifiying the player
+                ExternalInterface.addCallback("vjs_adjustCurrentTime", onAdjustCurrentTimeCalled);
             }
             catch(e:SecurityError){
                 if (loaderInfo.parameters.debug != undefined && loaderInfo.parameters.debug == "true") {
@@ -216,9 +220,19 @@ package{
 
         private function onAppendBufferCalled(base64str:String):void{
             var bytes:ByteArray = Base64.decode(base64str);
+            // write the bytes to the provider
+            _app.model.appendBuffer(bytes);
+        }
+
+        private function onAppendChunkReadyCalled(fnName:String):void{
+            var bytes:ByteArray = Base64.decode(ExternalInterface.call(fnName));
 
             // write the bytes to the provider
             _app.model.appendBuffer(bytes);
+        }
+
+        private function onAdjustCurrentTimeCalled(pValue:Number):void {
+            _app.model.adjustCurrentTime(pValue);
         }
 
         private function onEchoCalled(pResponse:* = null):*{
