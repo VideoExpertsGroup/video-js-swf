@@ -46,7 +46,7 @@ package com.videojs.providers{
         private var _pausePending:Boolean = false;
         private var _onmetadadataFired:Boolean = false;
         private var _playerStats:Object = new Object();
-        
+
         /**
          * The number of seconds between the logical start of the stream and the current zero
          * playhead position of the NetStream. During normal, file-based playback this value should
@@ -116,24 +116,24 @@ package com.videojs.providers{
             }
         }
 
-		public function get bufferTime():Number{
-			return 0;
-		}
+        public function get bufferTime():Number{
+                return 0;
+        }
 		
         public function set bufferTime(val:Number):void{
-			// not used
-		}
+                // not used
+        }
 
         public function get bufferTimeMax():Number{
-			return 0;
-		}
+                return 0;
+        }
 		
         public function set bufferTimeMax(val:Number):void{
-			// not used
-		}
+                // not used
+        }
 		
-		public function get playerStats():Object{
-            return _playerStats;
+        public function get playerStats():Object{
+                return _playerStats;
         }
         
         public function get duration():Number{

@@ -31,7 +31,7 @@ package com.videojs.providers{
         private var _metadata:Object;
         private var _loop:Boolean = false;
         private var _preloadInitiated:Boolean = false;
-		private var _playerStats:Object = new Object();
+	private var _playerStats:Object = new Object();
 
         private var _sound:Sound;
         private var _soundChannel:SoundChannel;
@@ -78,23 +78,23 @@ package com.videojs.providers{
             }
         }
 
-		public function get bufferTime():Number{
-			return 0;
-		}
+        public function get bufferTime():Number{
+            return 0;
+        }
 		
         public function set bufferTime(val:Number):void{
-			// not used
-		}
+            // not used
+        }
 
         public function get bufferTimeMax():Number{
-			return 0;
-		}
+            return 0;
+        }
 		
         public function set bufferTimeMax(val:Number):void{
-			// not used
-		}
+            // not used
+        }
 
-		public function get playerStats():Object{
+        public function get playerStats():Object{
             // not fill yet
             return _playerStats;
         }

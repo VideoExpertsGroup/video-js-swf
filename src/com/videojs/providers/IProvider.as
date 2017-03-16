@@ -21,19 +21,19 @@ package com.videojs.providers{
         function get time():Number;
 
         /**
-         * Setter and getter for buffer time (supported only for rtmpprovider)
+         * Setter and getter for buffer time (supported only in rtmpprovider)
          */
         function get bufferTime():Number;
         function set bufferTime(newval:Number):void;
         
         /**
-         * Setter and getter for maximal buffer time (supported only for rtmpprovider)
+         * Setter and getter for maximal buffer time (supported only in rtmpprovider)
          */ 
         function get bufferTimeMax():Number;
         function set bufferTimeMax(newval:Number):void;
         
         /**
-         * Return statistics of player
+         * Return statistics of player (supported only in rtmpprovider)
          */
         function get playerStats():Object;
         

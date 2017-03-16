@@ -81,55 +81,54 @@ package com.videojs.providers{
         }
 
         public function get bufferTime():Number{
-			if(_ns != null){
-				return _ns.bufferTime;
-			}
-			return _bufferTime;
-		}
-		
-        public function set bufferTime(val:Number):void{
-			_bufferTime = val;
-			if(_ns != null){
-                _ns.bufferTime = _bufferTime;
-            }
-		}
-
-        public function get bufferTimeMax():Number{
-			if(_ns != null){
-				return _ns.bufferTimeMax;
-			}
-			return _bufferTimeMax;
-		}
-		
-		public function get playerStats():Object{
-			if(_ns != null){
-				_playerStats["bufferTimeMax"] = _ns.bufferTimeMax;
-				_playerStats["bufferTime"] = _ns.bufferTime;
-				_playerStats["bufferLength"] = _ns.bufferLength;
-				_playerStats["bytesTotal"] = _ns.bytesTotal;
-				_playerStats["currentFPS"] = _ns.currentFPS;
-				_playerStats["dataReliable"] = _ns.dataReliable;
-				_playerStats["liveDelay"] = _ns.liveDelay;
-				_playerStats["maxPauseBufferTime"] = _ns.maxPauseBufferTime;
-				_playerStats["time"] = _ns.time;
-				_playerStats["info"] = _ns.info;
-				_playerStats["farID"] = _ns.farID;
-				_playerStats["farNonce"] = _ns.farNonce;
-				_playerStats["inBufferSeek"] = _ns.inBufferSeek;
-				_playerStats["backBufferTime"] = _ns.backBufferTime;
-				_playerStats["audioReliable"] = _ns.audioReliable;
-				_playerStats["backBufferLength"] = _ns.backBufferLength;
-            }	
-            
-            return _playerStats;
+                if(_ns != null){
+                        return _ns.bufferTime;
+                }
+                return _bufferTime;
         }
 		
+        public function set bufferTime(val:Number):void{
+                _bufferTime = val;
+                if(_ns != null){
+                        _ns.bufferTime = _bufferTime;
+                }
+        }
+
+        public function get bufferTimeMax():Number{
+                if(_ns != null){
+                        return _ns.bufferTimeMax;
+                }
+                return _bufferTimeMax;
+        }
+
         public function set bufferTimeMax(val:Number):void{
-			_bufferTimeMax = val;
-			if(_ns != null){
+            _bufferTimeMax = val;
+            if(_ns != null){
                 _ns.bufferTimeMax = _bufferTimeMax;
             }
-		}
+        }
+		
+        public function get playerStats():Object{
+            if(_ns != null){
+                _playerStats["bufferTimeMax"] = _ns.bufferTimeMax;
+                _playerStats["bufferTime"] = _ns.bufferTime;
+                _playerStats["bufferLength"] = _ns.bufferLength;
+                _playerStats["bytesTotal"] = _ns.bytesTotal;
+                _playerStats["currentFPS"] = _ns.currentFPS;
+                _playerStats["dataReliable"] = _ns.dataReliable;
+                _playerStats["liveDelay"] = _ns.liveDelay;
+                _playerStats["maxPauseBufferTime"] = _ns.maxPauseBufferTime;
+                _playerStats["time"] = _ns.time;
+                _playerStats["info"] = _ns.info;
+                _playerStats["farID"] = _ns.farID;
+                _playerStats["farNonce"] = _ns.farNonce;
+                _playerStats["inBufferSeek"] = _ns.inBufferSeek;
+                _playerStats["backBufferTime"] = _ns.backBufferTime;
+                _playerStats["audioReliable"] = _ns.audioReliable;
+                _playerStats["backBufferLength"] = _ns.backBufferLength;
+            }
+            return _playerStats;
+        }
 
         public function get duration():Number{
             if(_metadata != null && _metadata.duration != undefined){
@@ -309,7 +308,7 @@ package com.videojs.providers{
             // if the asset is paused
             else if(_isPaused && !_reportEnded){
                 _pausePending = false;
-                 _ns.resume();
+                _ns.resume();
                 _isPaused = false;
                 _model.broadcastEventExternally(ExternalEventName.ON_RESUME);
                 _model.broadcastEvent(new VideoPlaybackEvent(VideoPlaybackEvent.ON_STREAM_START, {}));
@@ -555,8 +554,7 @@ package com.videojs.providers{
             switch(e.info.code){
                 case "NetStream.Play.Reset":
                     break;
-                    
-				case "NetStream.Buffer.Flush":
+                case "NetStream.Buffer.Flush":
                     break;
                 case "NetStream.Play.Start":
                     _canPlayThrough = false;
@@ -582,19 +580,19 @@ package com.videojs.providers{
                     break;
 
                 case "NetStream.Buffer.Full":
-					// Sometimes bug on start NetStream: empty buffer
-					ExternalInterface.call("console.log", "[VIDEOJS-SWF] onNetStreamStatus: NetStream.Buffer.Full");
-					ExternalInterface.call("console.log", "[VIDEOJS-SWF] onNetStreamStatus: _ns.bufferTime = " + _ns.bufferTime);
-					ExternalInterface.call("console.log", "[VIDEOJS-SWF] onNetStreamStatus: _ns.bufferLength = " + _ns.bufferLength);
+                    // Sometimes bug on start NetStream: empty buffer
+                    ExternalInterface.call("console.log", "[VIDEOJS-SWF] onNetStreamStatus: NetStream.Buffer.Full");
+                    ExternalInterface.call("console.log", "[VIDEOJS-SWF] onNetStreamStatus: _ns.bufferTime = " + _ns.bufferTime);
+                    ExternalInterface.call("console.log", "[VIDEOJS-SWF] onNetStreamStatus: _ns.bufferLength = " + _ns.bufferLength);
 
-					if(_ns.bufferLength < (_ns.bufferTime *0.8)){
-						ExternalInterface.call("console.log", "[VIDEOJS-SWF] onNetStreamStatus: _ns.pause()");
-						_ns.pause();
-						if(!_pausePending){
-							ExternalInterface.call("console.log", "[VIDEOJS-SWF] onNetStreamStatus: _ns.resume()");
-							_ns.resume();
-						}
-					}
+                    if(_ns.bufferLength < (_ns.bufferTime *0.8)){
+                        ExternalInterface.call("console.log", "[VIDEOJS-SWF] onNetStreamStatus: _ns.pause()");
+                        _ns.pause();
+                        if(!_pausePending){
+                            ExternalInterface.call("console.log", "[VIDEOJS-SWF] onNetStreamStatus: _ns.resume()");
+                            _ns.resume();
+                        }
+                    }
                     _isBuffering = false;
                     _isPlaying = true;
                     _model.broadcastEventExternally(ExternalEventName.ON_BUFFER_FULL);

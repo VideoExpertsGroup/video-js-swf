@@ -107,6 +107,7 @@ package{
                 ExternalInterface.addCallback("vjs_bufferTime", onBufferTime);
                 ExternalInterface.addCallback("vjs_bufferTimeMax", onBufferTimeMax);
                 ExternalInterface.addCallback("vjs_playerStats", onPlayerStats);
+
                 // This callback should only be used when in data generation mode as it
                 // will adjust the notion of current time without notifiying the player
                 ExternalInterface.addCallback("vjs_adjustCurrentTime", onAdjustCurrentTimeCalled);
@@ -251,27 +252,27 @@ package{
             _app.model.discontinuity();
         }
 
-		private function onTakeScreenshot():*{
-			return _app.model.takeScreenshot;
-		}
+        private function onTakeScreenshot():*{
+                return _app.model.takeScreenshot;
+        }
 		
-		private function onBufferTime(pValue:* = null):*{
-			if(pValue != null){
-				_app.model.bufferTime = Number(pValue);
-			}
-			return _app.model.bufferTime;
-		}
+        private function onBufferTime(pValue:* = null):*{
+                if(pValue != null){
+                        _app.model.bufferTime = Number(pValue);
+                }
+                return _app.model.bufferTime;
+        }
 		
-		private function onBufferTimeMax(pValue:* = null):*{
-			if(pValue != null){
-				_app.model.bufferTimeMax = Number(pValue);
-			}
-			return _app.model.bufferTimeMax;
-		}
+        private function onBufferTimeMax(pValue:* = null):*{
+                if(pValue != null){
+                        _app.model.bufferTimeMax = Number(pValue);
+                }
+                return _app.model.bufferTimeMax;
+        }
 		
-		private function onPlayerStats():*{
-			return _app.model.playerStats;
-		}
+        private function onPlayerStats():*{
+                return _app.model.playerStats;
+        }
 
         private function onGetPropertyCalled(pPropertyName:String = ""):*{
 
@@ -360,7 +361,7 @@ package{
                 case "takeScreenshot":
                     return _app.model.takeScreenshot;
                     break;
-				case "bufferTime":
+                case "bufferTime":
                     return _app.model.bufferTime;
                     break;
                 case "bufferTimeMax":
@@ -493,5 +494,6 @@ package{
         private function onStageClick(e:MouseEvent):void{
             _app.model.broadcastEventExternally(ExternalEventName.ON_STAGE_CLICK);
         }
+
     }
 }
